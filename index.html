@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1840 鴉片戰爭：跨時空審問室（6組完整版・GAS 雲端 AI）</title>
+  <title>1840 鴉片戰爭：跨時空 AI 審問室（6組自主提問完整版）</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
@@ -15,8 +15,6 @@
     }
     .serif-font { font-family: 'Noto Serif TC', serif; }
     .gold-border { border: 1px solid rgba(251, 191, 36, 0.35); }
-    .card-hover { transition: all 0.2s ease; }
-    .card-hover:hover { transform: translateY(-2px); border-color: #fbbf24; box-shadow: 0 8px 20px -4px rgba(251, 191, 36, 0.2); }
     .chat-scroll::-webkit-scrollbar { width: 6px; }
     .chat-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
   </style>
@@ -28,13 +26,13 @@
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <span class="bg-amber-500 text-slate-950 font-black px-2.5 py-1 rounded text-xs tracking-wider">P.6 常識科・6組探究</span>
-        <h1 class="text-lg md:text-xl font-black serif-font text-amber-400 tracking-wide">🕵️‍♂️ 1840 鴉片戰爭：跨時空審問室</h1>
+        <h1 class="text-lg md:text-xl font-black serif-font text-amber-400 tracking-wide">🕵️‍♂️ 1840 鴉片戰爭：跨時空 AI 審問室</h1>
       </div>
 
       <!-- 3大步驟切換 -->
       <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-700 text-xs md:text-sm font-bold">
         <button onclick="switchStage(1)" id="nav-1" class="px-3.5 py-1.5 rounded-lg bg-amber-500 text-slate-950 transition">
-          1. 審問取證
+          1. 小組擬題與 AI 審問
         </button>
         <button onclick="switchStage(2)" id="nav-2" class="px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition">
           2. 證物分類 (<span id="unlocked-badge">0</span>/6)
@@ -49,10 +47,10 @@
         <div class="bg-slate-900 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-2 text-xs">
           <span class="text-slate-300 font-bold">本組黃金提問：</span>
           <span id="keys-display" class="text-amber-400 font-black tracking-widest text-sm">🔑🔑🔑</span>
-          <button onclick="resetGroupKeys()" class="text-[11px] text-slate-400 hover:text-amber-300 underline ml-1" title="重設提問次數">重設</button>
+          <button onclick="resetGroupKeys()" class="text-[11px] text-slate-400 hover:text-amber-300 underline ml-1">重設</button>
         </div>
         <button onclick="toggleTeacherModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 px-3 py-1.5 rounded-xl text-xs font-bold transition">
-          ⚙️ 教師設定 (GAS)
+          ⚙️ 教師設定 (GAS / 相片)
         </button>
       </div>
     </div>
@@ -61,61 +59,101 @@
   <!-- 主內容容器 -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4">
 
-    <!-- ================= 階段 1：6組審問取證 ================= -->
+    <!-- ================= 階段 1：6組自主擬題 + AI 跨時空審問 ================= -->
     <section id="stage-1" class="space-y-4">
       
       <!-- 6 組角色選擇列 -->
       <div class="bg-slate-900/90 border border-slate-800 p-3 rounded-2xl">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-bold text-amber-400">📌 請選擇你們組別負責審問的歷史當事人（全班 6 組各負責 1 位，免登入直接切換）：</span>
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="text-xs font-bold text-amber-400">📌 請選擇你們組別負責審問的歷史當事人（全班 6 組各負責 1 位）：</span>
           <span id="gas-status-pill" class="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-600 font-bold">
-            🟢 已連線 GAS 雲端 AI
+            🟢 已連接 GAS 雲端 AI
           </span>
         </div>
         <div id="char-tabs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
       </div>
 
-      <!-- 左右雙欄 -->
+      <!-- 左右雙欄：左欄【小組討論確立問題 + 提問句式鷹架】｜右欄【AI 歷史人物即時對話審問台】 -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
-        <!-- 左欄：星級問題卡 + GAS AI 自由發問 (7欄) -->
-        <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+        <!-- 左欄：學生自主擬題工作區 (6欄) -->
+        <div class="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+          
           <div class="space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
-              <div>
-                <h2 class="text-base font-black text-white">方式 A：對照工作紙，點選「星級提問卡」</h2>
-                <p class="text-xs text-slate-400">請將組員構思的問題與下方卡牌對比，揀選最具深度的問題發問</p>
+            <div class="border-b border-slate-800 pb-2.5">
+              <div class="flex items-center justify-between">
+                <h2 class="text-base font-black text-amber-400">步驟 1：小組討論並輸入你們的 2–3 條審問問題</h2>
+                <span class="text-[11px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">先討論・後發問</span>
               </div>
-              <div class="flex gap-1.5 text-[11px] font-bold">
-                <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-300">★ 基礎</span>
-                <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">★★ 進階</span>
-                <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">★★★ 深層批判</span>
+              <p class="text-xs text-slate-400 mt-1">請組員先各自想 1 條問題，經小組討論篩選並優化後，在下方輸入你們決定用來審問古人的問題：</p>
+            </div>
+
+            <!-- 小組 3 條問題輸入槽（真正讓學生用自己的問題發問！） -->
+            <div class="space-y-2.5">
+              <!-- 問題 1 -->
+              <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-amber-300">🔑 小組黃金問題 (一)：</span>
+                  <span class="text-[11px] text-slate-400">建議探究：事件起因／對百姓或經濟的影響</span>
+                </div>
+                <div class="flex gap-2">
+                  <input id="group-q1" type="text" placeholder="在此輸入你們小組討論確立的第 1 條問題..."
+                    class="flex-1 bg-slate-900 border border-slate-700 focus:border-amber-400 rounded-lg px-3 py-2 text-xs md:text-sm text-white placeholder-slate-500 outline-none">
+                  <button onclick="askGroupQuestion(1)" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2 rounded-lg text-xs shrink-0 transition">
+                    發問 💬
+                  </button>
+                </div>
+              </div>
+
+              <!-- 問題 2 -->
+              <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-amber-300">🔑 小組黃金問題 (二)：</span>
+                  <span class="text-[11px] text-slate-400">建議探究：當時的兩難處境／為什麼會戰敗或開戰</span>
+                </div>
+                <div class="flex gap-2">
+                  <input id="group-q2" type="text" placeholder="在此輸入你們小組討論確立的第 2 條問題..."
+                    class="flex-1 bg-slate-900 border border-slate-700 focus:border-amber-400 rounded-lg px-3 py-2 text-xs md:text-sm text-white placeholder-slate-500 outline-none">
+                  <button onclick="askGroupQuestion(2)" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2 rounded-lg text-xs shrink-0 transition">
+                    發問 💬
+                  </button>
+                </div>
+              </div>
+
+              <!-- 問題 3 (或根據 AI 回答即時追問) -->
+              <div class="bg-slate-950 border border-amber-500/40 p-3 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black text-rose-300">🔑 小組黃金問題 (三) ／ 即時高階追問：</span>
+                  <span class="text-[11px] text-amber-300">根據古人剛才的回答，深入追問背後的真正目的！</span>
+                </div>
+                <div class="flex gap-2">
+                  <input id="group-q3" type="text" placeholder="在此輸入第 3 條問題，或針對 AI 剛才的回答進行批判性追問..."
+                    class="flex-1 bg-slate-900 border border-slate-700 focus:border-amber-400 rounded-lg px-3 py-2 text-xs md:text-sm text-white placeholder-slate-500 outline-none">
+                  <button onclick="askGroupQuestion(3)" class="bg-rose-500 hover:bg-rose-400 text-white font-black px-3.5 py-2 rounded-lg text-xs shrink-0 transition">
+                    追問 🚀
+                  </button>
+                </div>
               </div>
             </div>
-            <div id="question-cards" class="space-y-2.5"></div>
           </div>
 
-          <!-- 方式 B：GAS AI 自由發問框 -->
-          <div class="bg-slate-950/90 border border-amber-500/40 rounded-xl p-3.5 space-y-2">
+          <!-- 分層提問鷹架（只提供方向與開頭句式，不直接給答案，照顧學習差異！） -->
+          <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-3.5 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-black text-amber-400">💬 方式 B：小組 AI 自由發問框（經 Google Apps Script 雲端連線）</span>
-              <span class="text-[11px] text-slate-400">自動觸發高階追問與解鎖證物</span>
+              <span class="text-xs font-bold text-amber-400">💡 提問靈感鷹架（點擊可將「問題開頭句式」填入上方空白欄，由你們補完下半句）：</span>
             </div>
-            <form onsubmit="handleCustomGasAsk(event)" class="flex gap-2">
-              <input id="custom-q-input" type="text" placeholder="輸入你們小組討論出的問題，直接向此角色發問..."
-                class="flex-1 bg-slate-900 border border-slate-700 focus:border-amber-400 rounded-lg px-3 py-2 text-xs md:text-sm text-white placeholder-slate-500 outline-none">
-              <button type="submit" id="gas-ask-btn" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-lg text-xs md:text-sm transition shrink-0">
-                AI 審問 🚀
-              </button>
-            </form>
+            <div id="scaffolds-box" class="grid grid-cols-1 gap-1.5"></div>
           </div>
+
         </div>
 
-        <!-- 右欄：歷史人物審問回應台 (5欄) -->
-        <div class="lg:col-span-5 bg-slate-900/95 gold-border rounded-2xl p-4 flex flex-col justify-between space-y-4">
-          <div class="flex items-center gap-3.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+        <!-- 右欄：歷史人物 AI 審問對話室 + 證物解鎖 (6欄) -->
+        <div class="lg:col-span-6 bg-slate-900/95 gold-border rounded-2xl p-4 flex flex-col justify-between space-y-3 h-[640px]">
+          
+          <!-- 人物頭像與基本檔案 -->
+          <div class="flex items-center gap-3.5 bg-slate-950 p-3 rounded-xl border border-slate-800 shrink-0">
             <div class="relative shrink-0">
-              <img id="stage-avatar" src="" alt="歷史人物照片" class="w-20 h-20 rounded-xl object-cover border-2 border-amber-400 bg-slate-800">
+              <img id="stage-avatar" src="" alt="歷史人物照片" class="w-16 h-16 rounded-xl object-cover border-2 border-amber-400 bg-slate-800">
               <label class="absolute -bottom-1.5 -right-1.5 cursor-pointer bg-slate-900 text-amber-300 border border-amber-500/60 text-[10px] px-1.5 py-0.5 rounded font-bold shadow">
                 📷 換相
                 <input type="file" accept="image/*" class="hidden" onchange="uploadPhotoForActive(event)">
@@ -126,31 +164,31 @@
                 <span id="stage-group-tag" class="text-[11px] font-black bg-amber-500 text-slate-950 px-2 py-0.5 rounded"></span>
                 <span id="stage-stance" class="text-[11px] font-bold text-amber-300 truncate"></span>
               </div>
-              <h3 id="stage-name" class="text-lg font-black serif-font text-white mt-0.5"></h3>
-              <p id="stage-bio" class="text-xs text-slate-400 line-clamp-2 mt-0.5"></p>
+              <h3 id="stage-name" class="text-base md:text-lg font-black serif-font text-white mt-0.5"></h3>
+              <p id="stage-bio" class="text-xs text-slate-400 line-clamp-1 mt-0.5"></p>
             </div>
           </div>
 
-          <div class="flex-1 bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col justify-between min-h-[220px]">
-            <div class="space-y-2.5">
-              <div id="asked-question-banner" class="hidden bg-amber-500/15 border-l-4 border-amber-400 px-3 py-1.5 rounded text-xs text-amber-200 font-bold"></div>
-              <div id="ai-answer-box" class="text-sm text-slate-100 leading-relaxed space-y-2"></div>
-            </div>
-
-            <div id="followup-box" class="hidden mt-4 pt-3 border-t border-slate-800 space-y-2">
-              <div class="text-xs font-black text-amber-400">⚡ 小組高階追問抉擇（揀選最具批判性的追問以解鎖證物卡）：</div>
-              <div id="followup-options" class="space-y-1.5"></div>
-              <div id="followup-feedback" class="hidden p-2.5 rounded-lg text-xs font-bold leading-relaxed"></div>
-            </div>
+          <!-- 審問對話紀錄流 (Chat History) -->
+          <div id="chat-stream" class="flex-1 bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 overflow-y-auto chat-scroll space-y-3">
+            <!-- 由 JS 渲染對話氣泡 -->
           </div>
 
-          <div class="flex items-center justify-between bg-slate-950 px-3.5 py-2.5 rounded-xl border border-slate-800">
+          <!-- 二選一結論驗證（當問完問題後彈出，確認學生讀懂 AI 的回答並解鎖證物） -->
+          <div id="followup-box" class="hidden bg-slate-950 border border-amber-500/50 rounded-xl p-3 space-y-2 shrink-0">
+            <div class="text-xs font-black text-amber-400">⚡ 審問結論核實（根據古人的回答，完成核實即可解鎖本組核心證物卡）：</div>
+            <div id="followup-options" class="space-y-1.5"></div>
+            <div id="followup-feedback" class="hidden p-2 rounded-lg text-xs font-bold leading-relaxed"></div>
+          </div>
+
+          <!-- 底部：當前角色證物狀態 -->
+          <div class="flex items-center justify-between bg-slate-950 px-3.5 py-2.5 rounded-xl border border-slate-800 shrink-0">
             <div class="text-xs">
               <span class="text-slate-400">本組核心證物：</span>
-              <span id="clue-status-text" class="font-bold text-slate-300">🔒 尚未解鎖（請完成高階追問）</span>
+              <span id="clue-status-text" class="font-bold text-slate-300">🔒 尚未解鎖（請向古人發問）</span>
             </div>
-            <button onclick="manualUnlockActiveClue()" class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg font-bold transition">
-              🔓 直接解鎖證物
+            <button onclick="manualUnlockActiveClue()" class="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg font-bold transition">
+              🔓 摘錄並解鎖證物
             </button>
           </div>
         </div>
@@ -163,9 +201,9 @@
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 class="text-base md:text-lg font-black text-amber-400">🧩 歷史真相拼圖：6 組證物分類（表面導火線 vs 深層根本原因）</h2>
-          <p class="text-xs text-slate-400">請 6 組代表匯報，並判斷每項因素屬於「🔥 表面導火線」還是「💣 深層根本原因」</p>
+          <p class="text-xs text-slate-400">請 6 組代表匯報審問結果，並點擊判斷每張證物屬於「🔥 表面導火線（火柴）」還是「💣 深層根本原因（火藥桶）」</p>
         </div>
-        <button onclick="unlockAllSixClues()" class="bg-amber-500 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs">
+        <button onclick="unlockAllSixClues()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs">
           🔓 教師一鍵解鎖全部 6 組證物
         </button>
       </div>
@@ -176,7 +214,6 @@
     <section id="stage-3" class="hidden space-y-4">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
         
-        <!-- 左側：高階思辨診斷與古今價值觀遷移 (7欄) -->
         <div class="lg:col-span-7 space-y-4">
           <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3">
             <span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-bold">課堂實時概念診斷</span>
@@ -198,7 +235,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
                 <div class="font-black text-amber-400 text-sm">🛡️ 1. 守法自律・遠離毒害</div>
-                <p class="text-slate-300 leading-relaxed">當年百姓誤信鴉片能提神而傾家蕩產；今天面對偽裝成潮流的新興毒品（如「依托咪酯／太空油」），我們必須堅決拒絕！</p>
+                <p class="text-slate-300 leading-relaxed">當年百姓誤信鴉片能提神而傾家蕩產；今天面對偽裝成潮流的新興毒品（如「依托咪酯／太空油」），我們必須堅決拒絕第一口！</p>
               </div>
               <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
                 <div class="font-black text-amber-400 text-sm">🚀 2. 居安思危・科技自強</div>
@@ -208,7 +245,6 @@
           </div>
         </div>
 
-        <!-- 右側：教師實時數據與課後分層任務派發 (5欄) -->
         <div class="lg:col-span-5 bg-slate-900 gold-border p-5 rounded-2xl space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-base font-black text-amber-400">📊 課堂實時評估數據與分層跟進</h3>
@@ -229,11 +265,11 @@
           <div class="space-y-2.5 text-xs">
             <div class="font-bold text-white">🎯 按課堂實時表現派發「分層延伸課業」：</div>
             <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span class="text-amber-300 font-black">★ 基礎鞏固任務（針對需釐清概念同學）：</span>
+              <span class="text-amber-300 font-black">★ 基礎鞏固任務：</span>
               <p class="text-slate-300 mt-1">完成《鴉片戰爭：導火線 vs 深層原因》思維導圖配對工作紙。</p>
             </div>
             <div class="p-3 bg-slate-950 rounded-xl border border-amber-500/40">
-              <span class="text-rose-300 font-black">★★★ 高階挑戰任務（針對已完全掌握同學）：</span>
+              <span class="text-rose-300 font-black">★★★ 高階挑戰任務：</span>
               <p class="text-slate-300 mt-1">撰寫《假如我是 1840 年的道光皇帝：給大清的三道自強改革聖旨》。</p>
             </div>
           </div>
@@ -251,145 +287,231 @@
         <h3 class="text-base font-black text-amber-400">⚙️ 教師設定（Google Apps Script 網址）</h3>
         <button onclick="toggleTeacherModal()" class="text-slate-400 hover:text-white text-sm font-bold">✕ 關閉</button>
       </div>
-      <div class="space-y-3 text-xs">
-        <label class="block font-bold text-white">🔗 貼上你的 Google Apps Script (GAS) 網址：</label>
+      <div class="space-y-3 text-xs leading-relaxed">
+        <label class="block font-bold text-white">🔗 貼上你為「鴉片戰爭」建立的 Google Apps Script (GAS) 網址：</label>
         <input id="gas-url-input" type="text" placeholder="https://script.google.com/macros/s/xxxxxx/exec"
           class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white">
+        <p class="text-slate-400">
+          ⚠️ 注意：請勿使用舊 profile.html 的網址！請使用剛才新建立、包含 <code>combinedPrompt</code> 的 GAS 網址（修改 GAS 後記住揀「管理部署作業 ➔ 編輯 ➔ 建立新版本」）。
+        </p>
       </div>
-      <div class="flex justify-end pt-2">
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="clearSavedGasUrl()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-xs">重設為預設網址</button>
         <button onclick="saveTeacherConfig()" class="bg-amber-500 text-slate-950 font-black px-4 py-2 rounded-lg text-xs">儲存並套用</button>
       </div>
     </div>
   </div>
 
   <script>
-    // 💡 請在此處填入你部署好的 GAS 網址
-    const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbw1le_AFGoqM8q1jicA_PUEiyBzHXkFILIFygUjSjYQgEIDLtjnJ6W8yM6DkP_r9i0rWw/exec";
+    // ============================================================================
+    // 💡 請將下方引號內的網址，換成你為「鴉片戰爭」部署的 GAS 網址 (/exec 結尾)
+    // ============================================================================
+    const DEFAULT_GAS_URL = ""; 
 
-    // 完整 6 位歷史人物資料庫
+    // 完整 6 位歷史人物資料庫（包含分層提問開頭句式鷹架、智能關鍵字後備庫、System Prompt）
     const CHARACTERS = [
       {
         id: 'lin', group: '第 1 組', name: '林則徐', title: '大清欽差大臣', stance: '嚴厲禁煙・開眼看世界',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Lin_Zexu.jpg/400px-Lin_Zexu.jpg',
         bio: '1839年奉道光帝之命南下廣州查禁鴉片，於虎門海灘銷毀二萬多箱鴉片。',
-        greeting: '諸位小調查員好！本官乃欽差大臣林則徐。若非鴉片毒害我大清百姓、掏空國庫白銀，本官又何須在虎門銷煙？',
-        systemPrompt: '你是1840年大清欽差大臣林則徐。請用淺白繁體中文回答香港小六學生問題，嚴格控制在75字內。重點指出：1.鴉片令百姓傾家蕩產、清兵無力作戰；2.白銀大量外流；3.虎門銷煙是禁毒自衛，英國藉口開戰。',
-        cards: [
-          { star: '⚠️ 表面問題', level: 0, q: '林大人，請問虎門銷煙一共用了多少天？', a: '本官在虎門銷煙歷時二十三天。不過現在英軍戰船已兵臨城下，問銷煙天數未能查出打仗的真正原因呢！' },
-          { star: '★ 基礎理解', level: 1, q: '為什麼你一定要在虎門把英國人的鴉片全部銷毀？', a: '因為鴉片流入後百姓傾家蕩產，清兵無力作戰，白銀大量外流！本官若不銷煙，幾十年後大清將無兵可作戰、無銀可充餉！' },
-          { star: '★★ 處境探究', level: 2, q: '你銷毀鴉片之前，難道不怕英國派軍艦來攻打大清嗎？', a: '本官深知英軍船堅炮利，所以在廣東早已加固海防、購買西洋大炮！無奈朝廷內部不少守舊官員主張妥協，才令防線失守！' },
-          { star: '★★★ 深層批判', level: 3, q: '有人說虎門銷煙惹怒英國才引發戰爭，你認為銷煙是真正原因嗎？', a: '虎門銷煙只是英國開戰的「表面藉口（導火線）」！英國真正目的是用武力強迫大清打開市場，就算不銷煙英軍也會入侵！' }
+        greeting: '諸位小調查員好！本官乃欽差大臣林則徐。你們小組已經討論好要問本官哪幾條問題了嗎？請在左方輸入問題向本官發問吧！',
+        systemPrompt: '你是1840年大清欽差大臣林則徐。請用淺白易懂的繁體中文（帶少許古風如「本官」、「大清」）回答香港小六學生的問題，字數控制在90字內。重點指出：1.鴉片令百姓傾家蕩產、清兵連槍都拿不穩；2.買鴉片令白銀大量外流；3.虎門銷煙是禁毒自衛（只是戰爭的表面導火線），你非常歡迎正當茶葉絲綢貿易，是英國借題發揮用武力打開中國市場。回答最後請附上一句「💡 林大人追問提示：」引導學生追問。',
+        scaffolds: [
+          { star: '★ 基礎句式（問影響）', prefix: '林大人，鴉片流入中國後對百姓和士兵有什麼影響，為什麼你一定要在虎門' },
+          { star: '★★ 進階句式（問防備）', prefix: '林大人，你銷毀英國人的鴉片之前，難道不怕英國派軍艦攻打大清嗎？你有沒有' },
+          { star: '★★★ 批判句式（問本質）', prefix: '有人說「虎門銷煙」激怒英國才導致打仗，你認為銷煙是真正原因，還是英國另有' }
         ],
-        followUp: {
-          prompt: '林則徐虎門銷煙是戰爭的什麼原因？',
-          optA: 'A. 直接導火線（禁毒自衛）', optB: 'B. 深層經濟原因', correct: 'A',
-          winText: '🏆 答得好！林則徐銷煙是出於禁毒自衛，屬於引爆戰爭的「直接導火線」。'
+        fallbackAnswers: {
+          greeting: '小調查員好！本官林則徐正忙於加固虎門海防，請問你們小組想向本官查問關於「虎門銷煙」還是「英軍開戰原因」的事宜？',
+          weapon: '本官深知英軍船堅炮利，所以在廣東早已加固海防、購買西洋大炮，並翻譯外國報紙了解敵情！無奈朝廷內部不少守舊官員輕視英軍，甚至主張妥協投降，才令防線失守！<br><span class="text-amber-300 font-bold">💡 林大人追問提示：為什麼大清當時造不出像英國一樣的新式戰船？</span>',
+          deep: '此問一針見血！虎門銷煙只是英國開戰的「表面藉口（導火線）」！本官只禁鴉片，十分歡迎正當茶葉貿易；但英國真正目的是扭轉貿易逆差並用武力打開中國市場，就算不銷煙，英軍遲早也會入侵！<br><span class="text-amber-300 font-bold">💡 林大人追問提示：你們可以摘錄本官的證供了！</span>',
+          default: '因為鴉片（福壽膏）流入中國後，百姓傾家蕩產，連士兵都吸得連槍都拿不穩；加上買鴉片令大清白銀大量外流！本官若不果斷在虎門銷煙，幾十年後大清就「無兵可作戰、無銀可充餉」了！<br><span class="text-amber-300 font-bold">💡 林大人追問提示：本官只禁鴉片不禁茶葉，為何英國仍要開戰？</span>'
         },
-        clueTitle: '第1組證物：林則徐虎門銷煙', clueDesc: '為挽救國民健康與阻止白銀外流而銷煙，屬引發戰爭的直接導火線。', clueCategory: 'trigger'
+        followUp: {
+          prompt: '綜合林大人的回答，虎門銷煙在整場鴉片戰爭中屬於什麼性質的原因？',
+          optA: 'A. 屬於戰爭的「表面導火線」（林則徐為禁毒自衛而銷煙，被英國借題發揮）',
+          optB: 'B. 屬於英國發動工業革命的原因',
+          correct: 'A',
+          winText: '🏆 核實成功！林則徐虎門銷煙是出於禁毒自衛，屬於引爆戰爭的「表面導火線」！'
+        },
+        clueTitle: '第1組證物：林則徐虎門銷煙（1839年）',
+        clueDesc: '林則徐為挽救國民健康與阻止白銀外流而在虎門銷煙，成為英國發動戰爭的「直接藉口（表面導火線）」。',
+        clueCategory: 'trigger'
       },
       {
         id: 'elliot', group: '第 2 組', name: '義律 (Elliot)', title: '英國駐華商務監督', stance: '工業革命・武力打開市場',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Charles_Elliot.jpg/400px-Charles_Elliot.jpg',
-        bio: '代表大英帝國商業利益，以林則徐銷毀英商鴉片為由，敦促英國國會派遣遠征艦隊侵華。',
-        greeting: 'Good day！我是大英帝國駐華商務監督義律。林則徐銷毀大英商人財產，皇家海軍必須用大炮說話！',
-        systemPrompt: '你是1840年英國駐華商務監督義律。請用繁體中文回答香港小六學生問題，嚴格控制在75字內。重點指出：1.英國完成工業革命，急需打開中國市場；2.買茶葉蝕本（貿易逆差），靠走私鴉片賺回白銀；3.銷煙只是藉口，真正目的是用武力逼清廷開放口岸。',
-        cards: [
-          { star: '⚠️ 表面問題', level: 0, q: '義律先生，你坐帆船從英國來中國要幾多個月？', a: '大英帝國海軍官員從不畏懼風浪！不過小調查員，別浪費寶貴的提問機會查探戰爭成因吧！' },
-          { star: '★ 基礎理解', level: 1, q: '為什麼你們英國商人不好好賣布料，偏要走私鴉片到中國？', a: '因為我們每年買中國茶葉蝕大本（貿易逆差），而中國人又不買英國貨！唯有靠走私利潤極高的鴉片，才能把白銀賺回英國！' },
-          { star: '★★ 處境探究', level: 2, q: '如果林則徐沒有銷毀鴉片，英國是不是就不會派兵攻打中國？', a: '老實說，林則徐銷煙只是給了英國出兵的藉口！英國剛完成工業革命急需市場，清廷卻閉關自守，我們早晚要用武力打開中國大門！' },
-          { star: '★★★ 深層批判', level: 3, q: '英國本國禁吸鴉片卻走私來中國，這算什麼自由貿易？', a: '在商言商，大英帝國只看國家利益。我們口頭上叫維護貿易自由，真正的深層目的是用堅船利炮強迫清廷開放通商口岸與割地！' }
+        bio: '代表大英帝國商業與殖民利益，以林則徐銷毀英商鴉片為由，敦促英國國會派遣遠征艦隊侵華。',
+        greeting: 'Good day！我是大英帝國駐華商務監督義律。你們這群小調查員討論好問題了嗎？在左方輸入你們的問題吧！',
+        systemPrompt: '你是1840年英國駐華商務監督義律(Charles Elliot)。請用繁體中文回答香港小六學生問題，語氣高傲且維護大英帝國商業利益，字數控制在90字內。重點透露：1.英國完成工業革命，急需打開中國龐大市場傾銷機器布料；2.英國買中國茶葉絲綢蝕大本（貿易逆差），靠走私鴉片賺回白銀；3.林則徐銷煙只是英國出兵的藉口，真正深層目的是用堅船利炮逼清廷開放通商口岸及割地。最後附上一句「💡 義律追問提示：」。',
+        scaffolds: [
+          { star: '★ 基礎句式（問走私）', prefix: '義律先生，為什麼你們英國商人不好好賣布料，偏偏要走私害人的鴉片到' },
+          { star: '★★ 進階句式（問藉口）', prefix: '如果林則徐當年沒有銷毀鴉片，你們英國是不是就不會派軍艦攻打中國？還是你們其實想' },
+          { star: '★★★ 批判句式（揭雙標）', prefix: '英國本國法律都嚴禁國民吸食鴉片，你們卻走私來中國並以「自由貿易」為名開戰，你們真正的深層目的是什麼？' }
         ],
-        followUp: {
-          prompt: '義律口口聲聲說開戰是為了「自由貿易」，真正深層動機是什麼？',
-          optA: 'A. 為了運送英女王的信件', optB: 'B. 為了「打開中國龐大市場」及「扭轉貿易逆差」', correct: 'B',
-          winText: '🏆 批判力滿分！揭穿英方雙重標準——「打開中國市場」與「扭轉貿易逆差」才是深層根本原因！'
+        fallbackAnswers: {
+          greeting: 'Hello！我是大英帝國代表義律。時間就是金錢，請直接問我關於「中英貿易逆差」或「大英帝國出兵真正目的」的問題吧！',
+          weapon: '我們大英帝國剛剛完成工業革命，擁有最先進的蒸汽鐵甲艦與遠程火炮！而清朝卻還停留在木帆船與大刀長矛的時代，這場仗的勝負早就注定了！<br><span class="text-amber-300 font-bold">💡 義律追問提示：我們擁有強大海軍，最想強迫清廷開放什麼？</span>',
+          deep: '咳咳……你們這群小調查員的問題真尖銳！老實說吧，林則徐銷煙只是給了英國國會出兵的最佳藉口！英國完成工業革命後工廠生產海量商品，我們真正的深層目的是用堅船利炮打破清廷「閉關自守」，強迫中國開放龐大市場！<br><span class="text-amber-300 font-bold">💡 義律追問提示：你們已經識破大英帝國的深層目的了！</span>',
+          default: '哼！我們英國每年買中國茶葉和絲綢蝕大本（貿易逆差），而中國人自給自足不買英國貨！我們唯有在印度種植並走私利潤極高的鴉片來中國，才能把白銀賺回英國！<br><span class="text-amber-300 font-bold">💡 義律追問提示：如果林則徐不銷煙，我們還會為了打開市場而開戰嗎？</span>'
         },
-        clueTitle: '第2組證物：英國工業革命與打開市場野心', clueDesc: '英國完成工業革命後急需市場傾銷商品，企圖用武力打破清廷貿易限制，屬深層根本原因。', clueCategory: 'root'
+        followUp: {
+          prompt: '義律口口聲聲說開戰是為了「維護自由貿易」，英國真正的深層根本原因是什麼？',
+          optA: 'A. 為了幫助清朝訓練水師士兵',
+          optB: 'B. 工業革命後急需用武力「打開中國龐大市場」及「扭轉貿易逆差」（深層原因）',
+          correct: 'B',
+          winText: '🏆 批判力滿分！成功揭穿英方雙重標準——「打開中國市場」與「扭轉貿易逆差」才是深層根本原因！'
+        },
+        clueTitle: '第2組證物：英國工業革命與打開市場野心',
+        clueDesc: '英國完成工業革命後急需龐大市場傾銷商品，企圖用武力打破清廷貿易限制，屬「深層根本原因」。',
+        clueCategory: 'root'
       },
       {
         id: 'afu', group: '第 3 組', name: '廣州煙民阿福', title: '染上鴉片煙癮的百姓', stance: '傾家蕩產・社會與軍隊崩潰',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Chinese_opium_smokers_1880s.jpg/400px-Chinese_opium_smokers_1880s.jpg',
-        bio: '因誤信鴉片能提神而染上毒癮，見證百姓破產與清兵吸毒喪失戰力。',
-        greeting: '咳咳……我叫阿福。自從英國煙販把鴉片賣進廣州，我家破人亡，連守城的清兵都在吸……',
-        systemPrompt: '你是1840年廣州煙民阿福. 請用繁體中文回答香港小六學生問題，嚴格控制在75字內。重點指出：1.吸鴉片骨瘦如柴、傾家蕩產；2.連清兵都吸毒毫無戰鬥力；3.迫使林則徐必須嚴厲禁煙。',
-        cards: [
-          { star: '⚠️ 表面問題', level: 0, q: '阿福，請問你平時在廣州最喜歡吃什麼點心？', a: '唉……我連買白粥的銅錢都拿去買鴉片了，哪有錢吃點心！快問問鴉片對百姓的禍害吧！' },
-          { star: '★ 基礎理解', level: 1, q: '鴉片對你的身體和家庭造成了什麼嚴重影響？', a: '損友騙我說吸鴉片能提神，誰知一吸上癮！斷煙就全身骨痛，我把田地房屋都賣光了，骨瘦如柴、家破人亡！' },
-          { star: '★★ 處境探究', level: 2, q: '當時連保護國家的清朝士兵也有吸食鴉片嗎？', a: '到處都是吸毒的清兵！他們吸得雙手發抖、精神恍惚，連長矛和火繩槍都拿不穩，怎能打仗？' },
-          { star: '★★★ 深層批判', level: 3, q: '如果朝廷不派林則徐來禁煙，整個大清會變成怎樣？', a: '若不銷煙，全國百姓都成煙鬼，清軍喪失戰力，白銀被掏空，大清自己也會滅亡！所以禁煙是救國唯一出路！' }
+        bio: '原為廣州健壯挑夫，因誤信鴉片能提神解勞而染上毒癮，見證百姓破產與清兵吸毒喪失戰力。',
+        greeting: '咳咳……小調查員，我叫阿福。自從英國煙販把「福壽膏（鴉片）」賣進廣州，我家破人亡……你們討論好想問我什麼了嗎？',
+        systemPrompt: '你是1840年廣州染上鴉片煙癮的平民阿福。請用繁體中文回答香港小六學生問題，語氣後悔虛弱，字數控制在90字內。重點透露：1.最初誤信損友以為鴉片能提神，一吸上癮後骨瘦如柴、傾家蕩產；2.連守城的清朝士兵和官員都吸鴉片，連槍都拿不穩，軍隊毫無戰鬥力；3.這直接迫使林則徐必須嚴厲禁煙，並勸戒現代學生絕對不可碰任何毒品。最後附上「💡 阿福追問提示：」。',
+        scaffolds: [
+          { star: '★ 基礎句式（問個人）', prefix: '阿福，當初你是怎樣染上鴉片煙癮的？鴉片對你的身體和家庭造成了什麼' },
+          { star: '★★ 進階句式（問軍隊）', prefix: '當時廣州除了普通百姓，連保護國家的清朝士兵和官員也有吸食鴉片嗎？這對打仗有什麼' },
+          { star: '★★★ 批判句式（問救國）', prefix: '如果朝廷再不派林則徐來嚴厲禁煙，整個大清的百姓、軍隊和國家會變成怎樣？' }
         ],
-        followUp: {
-          prompt: '阿福與清兵的慘況，如何解釋林則徐「虎門銷煙」的必要性？',
-          optA: 'A. 鴉片摧毀民生與軍隊戰力，迫使林則徐果斷禁煙（導火線）', optB: 'B. 為了幫朝廷省錢買米', correct: 'A',
-          winText: '🏆 分析透徹！鴉片毒害民生與軍隊促成虎門銷煙（導火線），也提醒我們必須遠離毒害！'
+        fallbackAnswers: {
+          greeting: '咳咳……各位小調查員好，我現在全身無力，你們想問鴉片對我家庭的禍害，還是對清朝軍隊的影響？',
+          weapon: '煙館裡到處都是守城的清朝士兵和官老爺！他們吸鴉片吸得雙手發抖、精神恍惚，連長矛和火繩槍都拿不穩，這樣的軍隊怎能抵擋英國人的堅船利炮呢？<br><span class="text-amber-300 font-bold">💡 阿福追問提示：如果林大人不來銷煙，大清還有兵可以保衛國家嗎？</span>',
+          deep: '如果林大人不來虎門銷煙，全國百姓都會變成煙鬼，清軍完全喪失戰鬥力，白銀又被掏空，大清不用外敵攻打自己也會滅亡！所以禁煙是救國救民的唯一出路！你們現代學生也千萬別受人引誘碰任何毒物啊！<br><span class="text-amber-300 font-bold">💡 阿福追問提示：快把鴉片毒害民生與軍隊的證供摘錄下來吧！</span>',
+          default: '唉！當初損友騙我說吸幾口「福壽膏（鴉片）」能提神解勞，誰知一吸就上癮！一旦斷煙就全身骨痛流涕，我為了買鴉片把田地和屋子都賣光了，骨瘦如柴、家破人亡！<br><span class="text-amber-300 font-bold">💡 阿福追問提示：除了普通百姓，你知道連守城的清兵都在吸鴉片嗎？</span>'
         },
-        clueTitle: '第3組證物: 鴉片毒害民生與清兵戰力', clueDesc: '鴉片令百姓傾家蕩產、清軍喪失戰鬥力，迫使清廷派林則徐禁煙，屬導火線因素。', clueCategory: 'trigger'
+        followUp: {
+          prompt: '看到阿福與清兵被鴉片摧毀的慘況，這如何解釋林則徐「虎門銷煙」的必要性？',
+          optA: 'A. 鴉片嚴重摧毀國民健康與軍隊戰力，迫使林則徐必須果斷禁煙（成為引爆戰爭的直接導火線因素）',
+          optB: 'B. 鴉片只是一種普通藥材，對國家沒有影響',
+          correct: 'A',
+          winText: '🏆 分析透徹！鴉片毒害民生與軍隊促成虎門銷煙（導火線），亦提醒我們今天必須堅決拒絕一切毒品！'
+        },
+        clueTitle: '第3組證物：鴉片毒害民生與清兵戰力',
+        clueDesc: '鴉片令百姓傾家蕩產、清軍喪失戰鬥力，直接迫使清廷派林則徐嚴厲禁煙，屬引發銷煙的「直接導火線因素」。',
+        clueCategory: 'trigger'
       },
       {
         id: 'qishan', group: '第 4 組', name: '守舊大臣琦善', title: '朝廷保守妥協派代表', stance: '天朝自大・閉關與腐敗',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mandarin_in_court_dress.jpg/400px-Mandarin_in_court_dress.jpg',
-        bio: '長年陶醉於天朝迷夢，英軍北上後主張將林則徐革職並割地求和。',
-        greeting: '哼！我大清乃天朝上國，物產豐隆！若非林則徐銷煙惹怒英夷，本官何須收拾殘局？',
-        systemPrompt: '你是1840年清朝大臣琦善。請用繁體中文回答香港小六學生，嚴格控制在75字內。重點指出：1.閉關自守不了解世界；2.視西方科技為奇技淫巧；3.朝廷腐敗懦弱主張割地求和。',
-        cards: [
-          { star: '⚠️ 表面問題', level: 0, q: '大人，請問你身上的官服是用什麼絲綢做的？', a: '本官乃一品大員，官服自然是上等貢緞！不過小調查員，快問國家大事吧！' },
-          { star: '★ 基礎理解', level: 1, q: '為什麼大清長年實行「閉關自守」，只准在廣州做生意？', a: '因為大清自認是天朝上國無所不有！只開放廣州十三行是為了防範外夷，我們一直以為外國只是落後小國……' },
-          { star: '★★ 處境探究', level: 2, q: '為什麼英國完成工業革命，大清卻不向西方學習新科技？', a: '朝廷上下把西洋蒸汽機和火炮當成沒用的「奇技淫巧」，只讀四書五經，不知外面的世界已巨變！' },
-          { star: '★★★ 深層批判', level: 3, q: '林則徐在廣州守得很好，為什麼朝廷反而將他革職並求和？', a: '英軍逼近天津時朝廷嚇慌了！官員貪生怕死推卸責任，唯有割地賠款求和，暴露了朝廷的腐敗懦弱！' }
+        bio: '清廷高官，長年陶醉於「天朝上國」迷夢，英軍北上後主張將林則徐革職並割地賠款求和。',
+        greeting: '哼！我大清乃「天朝上國」，無所不有！你們這群小調查員在左方輸入問題吧，看看本官如何回答你們！',
+        systemPrompt: '你是1840年清朝守舊妥協派大臣琦善。請用繁體中文回答香港小六學生問題，語氣起初自大（「天朝上國」），後顯露怯懦妥協，字數控制在90字內。重點透露：1.清廷長期「閉關自守」（廣州一口通商），不了解世界工業革命變化；2.視西方蒸汽機與科技為奇技淫巧；3.朝廷政治腐敗、官員貪生怕死主張割地求和，這是清朝落後捱打的深層內部原因。最後附上「💡 歷史反思提示：」。',
+        scaffolds: [
+          { star: '★ 基礎句式（問閉關）', prefix: '琦善大人，為什麼大清長年實行「閉關自守」，只准外國人在廣州一個地方' },
+          { star: '★★ 進階句式（問科技）', prefix: '為什麼英國已經完成工業革命，你們朝廷官員卻一直不向西方學習新科技，反而覺得' },
+          { star: '★★★ 批判句式（問腐敗）', prefix: '林則徐在廣東明明守得很好，為什麼英軍一北上，朝廷反而將林則徐革職並向英軍割地求和？' }
         ],
-        followUp: {
-          prompt: '琦善的回答反映了清朝什麼致命的深層內部問題？',
-          optA: 'A. 官員走路不夠快', optB: 'B. 盲目自大、閉關自守與政治腐敗，導致科技與國力落後', correct: 'B',
-          winText: '🏆 一針見血！閉關自守、盲目自大與政治腐敗正是清朝走向沒落、落後捱打的深層內因！'
+        fallbackAnswers: {
+          greeting: '哼！本官乃朝廷欽差大臣琦善。你們想問我大清為何實行「閉關自守」，還是想問朝廷為何與英軍議和？',
+          weapon: '朝廷上下一直自認是「天朝上國」，把西洋的蒸汽機和科學當成沒用的「奇技淫巧」，只懂得讀四書五經考科舉，根本不知道外面的世界已經變得這麼強大……<br><span class="text-amber-300 font-bold">💡 歷史反思提示：當英軍打到天津時，朝廷官員的表現如何？</span>',
+          deep: '唉！當英軍艦隊北上逼近天津大沽口時，皇上和朝中權貴都嚇慌了！我們害怕英軍打進京城，唯有把開戰責任推給林則徐，希望割地賠款息事寧人……這確實暴露了朝廷的政治腐敗與制度僵化！<br><span class="text-amber-300 font-bold">💡 歷史反思提示：閉關自守與政治腐敗，正是清朝沒落的深層內因！</span>',
+          default: '因為我大清自認是「天朝上國」，地大物博，根本不需要外國貨物！只開放廣州十三行（閉關自守），是為了防範外夷，我們一直以為外國只是落後蠻夷小國……<br><span class="text-amber-300 font-bold">💡 歷史反思提示：長期閉關自守，令大清在科技上付出了什麼代價？</span>'
         },
-        clueTitle: '第4組證物：清廷天朝自大與閉關自守', clueDesc: '清朝沉迷迷夢、閉關自守、官場腐敗且拒絕認識世界，屬深層根本原因。', clueCategory: 'root'
+        followUp: {
+          prompt: '從琦善的回答中，我們看到清朝在面對世界巨變時有什麼致命的「深層內部問題」？',
+          optA: 'A. 清廷盲目自大、長期「閉關自守」與政治腐敗，不思進取，導致國力遠遠落後於西方（深層內因）',
+          optB: 'B. 清朝官員太喜歡出國旅遊',
+          correct: 'A',
+          winText: '🏆 一針見血！「閉關自守、盲目自大與政治腐敗」正是令清朝走向沒落、落後捱打的深層內部原因！'
+        },
+        clueTitle: '第4組證物：清廷天朝自大與閉關自守',
+        clueDesc: '清朝沉迷「天朝上國」迷夢，長期閉關自守、官場腐敗且拒絕認識世界巨變，屬導致捱打的「深層根本原因」。',
+        clueCategory: 'root'
       },
       {
         id: 'howqua', group: '第 5 組', name: '華商伍秉鑑', title: '廣州十三行首富商人', stance: '貿易逆差・白銀大量外流',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Howqua_%28Wu_Bingjian%29.jpg/400px-Howqua_%28Wu_Bingjian%29.jpg',
-        bio: '十三行行主，長年負責中英茶葉絲綢貿易，親眼目睹鴉片走私如何扭轉中英貿易帳目。',
-        greeting: '老夫乃廣州十三行商人伍秉鑑。幾十年來中英做生意賺蝕多少白銀，老夫帳簿記得一清二楚！',
-        systemPrompt: '你是1840年華商伍秉鑑。請用繁體中文回答香港小六學生，嚴格控制在75字內。重點指出：1.原本中國賣茶葉賺英國大量白銀（貿易逆差）；2.英國為扭轉逆差走私鴉片，令中國白銀外流；3.本質是爭奪貿易利益與白銀的經濟戰爭。',
-        cards: [
-          { star: '⚠️ 表面問題', level: 0, q: '伍老先生，英國人最喜歡喝紅茶還是綠茶？', a: '英國人最愛武夷紅茶配砂糖！不過茶葉背後的白銀帳目才是關鍵，換條問題吧！' },
-          { star: '★ 基礎理解', level: 1, q: '在鴉片大量走私前，中英貿易是誰賺錢、誰蝕錢？', a: '原本是大清賺大錢！英國人瘋狂買中國茶葉瓷器，中國卻不買英國貨，英國每年付大量白銀，這叫貿易逆差！' },
-          { star: '★★ 處境探究', level: 2, q: '英國為了扭轉蝕錢局面，想出了什麼辦法？', a: '英國東印度公司發現在印度種植鴉片並武裝走私到中國！短短幾年間，大清反而每年流失幾百萬兩白銀！' },
-          { star: '★★★ 深層批判', level: 3, q: '從帳簿來看，這場戰爭本質上是一場怎樣的戰爭？', a: '這是一場爭奪白銀與市場的深層經濟侵略戰爭！英國絕不甘心放棄鴉片暴利，想把商品賣到全中國！' }
+        bio: '廣州十三行怡和行行主，長年負責中英茶葉絲綢貿易，親眼目睹鴉片走私如何扭轉中英貿易帳目。',
+        greeting: '各位小調查員好，老夫乃廣州十三行商人伍秉鑑。中英做生意賺蝕多少白銀，老夫帳簿一清二楚！請在左方輸入問題查帳吧！',
+        systemPrompt: '你是1840年廣州十三行首富華商伍秉鑑。請用繁體中文回答香港小六學生問題，語氣精明務實，字數控制在90字內。重點透露：1.原本外國買中國茶葉、絲綢、瓷器，中國大賺白銀，英國嚴重虧蝕（貿易逆差）；2.英國為扭轉虧蝕，大量走私鴉片，結果變成中國每年流失幾百萬兩白銀；3.這場戰爭本質上是英國為了爭奪貿易利益與白銀而發動的深層經濟戰爭。最後附上「💡 伍秉鑑追問提示：」。',
+        scaffolds: [
+          { star: '★ 基礎句式（問賺蝕）', prefix: '伍老先生，在鴉片還沒有大量走私進來之前，中英貿易賣茶葉和絲綢是誰賺錢、誰蝕錢？' },
+          { star: '★★ 進階句式（問逆轉）', prefix: '英國人為了扭轉買茶葉蝕錢（貿易逆差）的局面，想出了什麼卑鄙辦法把中國的白銀賺走？' },
+          { star: '★★★ 批判句式（問本質）', prefix: '從你的商業帳簿來看，這場鴉片戰爭表面上是為銷煙而打，但背後其實是一場爭奪什麼的戰爭？' }
         ],
-        followUp: {
-          prompt: '伍秉鑑的帳簿證明了中英之間的經濟矛盾，屬於戰爭的什麼原因？',
-          optA: 'A. 英國為扭轉貿易逆差及掠奪白銀走私鴉片，屬深層經濟原因', optB: 'B. 為了請中國人食飯', correct: 'A',
-          winText: '🏆 帳目清晰！中英貿易逆差與白銀爭奪正是埋藏在鴉片戰爭背後的深層經濟原因！'
+        fallbackAnswers: {
+          greeting: '呵呵，小調查員好！老夫掌管廣州十三行貿易多年，你們想查問「茶葉貿易逆差」還是「鴉片如何令白銀外流」？',
+          weapon: '英國東印度公司發現正常賣布料賺不回白銀，竟然在印度大量種植鴉片，再武裝走私到中國！因為鴉片令人上癮，短短幾年間，大清反而每年倒流幾百萬兩白銀去英國！<br><span class="text-amber-300 font-bold">💡 伍秉鑑追問提示：這場仗本質上是為了爭奪什麼？</span>',
+          deep: '小調查員看得透徹！從老夫的帳簿來看，這根本是一場爭奪「白銀與龐大市場」的深層經濟侵略戰爭！英國絕不甘心放棄鴉片暴利，更想拆掉廣州十三行的限制，把英國商品賣到全中國！<br><span class="text-amber-300 font-bold">💡 伍秉鑑追問提示：快把這份中英貿易逆差證供摘錄下來吧！</span>',
+          default: '原本一直是我們大清賺大錢！英國人瘋狂購買中國的茶葉、絲綢和瓷器，但中國百姓卻不需要英國貨，結果英國每年都要付給中國大量白銀，這叫「貿易逆差」！<br><span class="text-amber-300 font-bold">💡 伍秉鑑追問提示：英國人為了扭轉蝕錢局面，用了什麼卑鄙手段？</span>'
         },
-        clueTitle: '第5組證物：中英貿易逆差與白銀外流', clueDesc: '英國為扭轉巨額貿易逆差靠走私鴉片掠奪中國白銀，屬深層經濟原因。', clueCategory: 'root'
+        followUp: {
+          prompt: '伍秉鑑的貿易帳簿證明了中英之間存在巨大的經濟矛盾。這屬於戰爭的哪一類原因？',
+          optA: 'A. 英國為扭轉買茶葉的「貿易逆差」及掠奪白銀而走私鴉片，屬於戰爭爆發的「深層經濟原因」',
+          optB: 'B. 屬於偶然發生的天氣原因',
+          correct: 'A',
+          winText: '🏆 帳目一清二楚！「中英貿易逆差與白銀爭奪」正是埋藏在鴉片戰爭背後的深層經濟原因！'
+        },
+        clueTitle: '第5組證物：中英貿易逆差與白銀外流',
+        clueDesc: '英國為扭轉購買中國茶葉絲綢的巨額貿易逆差，靠走私鴉片掠奪中國白銀，屬「深層經濟原因」。',
+        clueCategory: 'root'
       },
       {
         id: 'guantianpei', group: '第 6 組', name: '名將關天培', title: '廣東水師提督（虎門守將）', stance: '浴血抗英・軍事科技懸殊',
         avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Guan_Tianpei.jpg/400px-Guan_Tianpei.jpg',
-        bio: '廣東水師最高將領，與林則徐加固炮台，於虎門之戰率孤軍與英軍鐵甲艦浴血奮戰殉國。',
-        greeting: '本將乃廣東水師提督關天培！縱使武器不及英夷，本將定以死報國，寸土不讓！',
-        systemPrompt: '你是1840年關天培。請用繁體中文回答香港小六學生，嚴格控制在75字內。重點指出：1.中英軍事科技差距極大；2.英軍用蒸汽鐵甲艦與開花彈；3.清軍用木帆船舊炮，印證落後就要捱打。',
-        cards: [
-          { star: '⚠️ 表面問題', level: 0, q: '關將軍，請問你在虎門炮台平時操練要跑多少圈？', a: '英軍蒸汽鐵甲艦已開火轟擊，快問問中英兩軍在武器與科技上的巨大差距吧！' },
-          { star: '★ 基礎理解', level: 1, q: '英軍戰船和大炮跟大清水師有什麼分別？', a: '英軍開來的是不受風向限制的蒸汽鐵甲艦，大炮射程遠！大清水師還是靠風吹的木帆船，大炮射程短又笨重！' },
-          { star: '★★ 處境探究', level: 2, q: '為什麼朝廷不及早為水師換上新式戰船和火炮？', a: '朝廷長年忽視軍事科技研發，軍費被貪官剋扣，士兵手裡拿的大多是舊火繩槍與大刀！' },
-          { star: '★★★ 深層批判', level: 3, q: '你在虎門浴血奮戰，這場戰爭給後世最深刻的教訓是什麼？', a: '國家科技與制度落後，最痛心的教訓就是「落後就要捱打」！你們後輩定要學習先進科技！' }
+        bio: '廣東水師最高將領，與林則徐合力加固虎門炮台，於虎門之戰率孤軍與英軍鐵甲艦浴血奮戰殉國。',
+        greeting: '各位小調查員！本將乃廣東水師提督關天培！你們小組討論好問題了嗎？請在左方輸入問題向本將查問前線戰況！',
+        systemPrompt: '你是1840年廣東水師提督關天培。請用繁體中文回答香港小六學生問題，語氣忠勇剛烈，字數控制在90字內。重點透露：1.前線將士雖奮勇抗敵，但中英軍事科技差距太大；2.英軍使用工業革命後的蒸汽鐵甲戰船與遠程開花大炮；3.清軍仍用木造帆船、生鏽火繩槍與射程短的舊鐵炮，印證「科技與國力落後就要捱打」的深層原因。最後附上「💡 關將軍追問提示：」。',
+        scaffolds: [
+          { star: '★ 基礎句式（問武器）', prefix: '關將軍，在前線交戰時，英國海軍的戰船和大炮跟我們大清水師的武器有什麼分別？' },
+          { star: '★★ 進階句式（問原因）', prefix: '既然我們的木帆船和舊火炮落後這麼多，為什麼朝廷之前沒有及早研發新式戰船和' },
+          { star: '★★★ 批判句式（問教訓）', prefix: '將軍你在虎門浴血奮戰，你認為中英軍事科技差距這麼大，給我們後世中國人最深刻的教訓是什麼？' }
         ],
-        followUp: {
-          prompt: '關天培將軍點出了木帆船與鐵甲艦的差距，反映了什麼？',
-          optA: 'A. 當時海上風浪太大', optB: 'B. 清朝軍事科技嚴重落後於英國（深層原因），教訓我們必須科技自強', correct: 'B',
-          winText: '🏆 深刻體會！中英軍事科技懸殊是深層原因，更帶出「落後就要捱打、自強不息」的核心價值觀！'
+        fallbackAnswers: {
+          greeting: '本將關天培正在虎門炮台督戰！你們想問「中英兩軍戰船火炮的差距」，還是這場仗給後世的「歷史教訓」？',
+          weapon: '林大人和本將雖極力購買西洋火炮加固虎門，但朝廷長年閉關自守、忽視軍事科技研發，軍費又被貪官剋扣，大多數清兵手裡拿的還是大刀、長矛和百年前的生鏽火繩槍！<br><span class="text-amber-300 font-bold">💡 關將軍追問提示：面對船堅炮利的英軍，這場仗給後世什麼深刻教訓？</span>',
+          deep: '將士雖有死戰報國之心，奈何國家科技與制度落後！這場仗最痛心的教訓就是「落後就要捱打」！你們後輩定要開眼看世界、努力學習先進科技，國家強盛才不會受外敵欺凌！<br><span class="text-amber-300 font-bold">💡 關將軍追問提示：請把中英軍事科技懸殊的證供摘錄下來吧！</span>',
+          default: '相差太遠了！英軍開來的是不受風向限制的蒸汽鐵甲艦，大炮射程遠又會爆炸；而我大清水師還是靠風吹的木造帆船，大炮射程短又笨重，連英艦的邊都打不中！<br><span class="text-amber-300 font-bold">💡 關將軍追問提示：為什麼大清一直沒有研發新式武器？</span>'
         },
-        clueTitle: '第6組證物：中英軍事科技懸殊', clueDesc: '英國擁有蒸汽鐵甲艦與遠程火炮，清軍停留在木帆船時代，屬深層科技與國力原因。', clueCategory: 'root'
+        followUp: {
+          prompt: '關天培將軍點出了「木帆船舊炮 vs 蒸汽鐵甲艦」的巨大差距。這反映了什麼深層原因與價值觀？',
+          optA: 'A. 反映清朝軍事科技嚴重落後於工業革命後的英國（深層原因），教訓我們必須「居安思危、科技自強」',
+          optB: 'B. 說明木帆船比鐵甲艦更環保',
+          correct: 'A',
+          winText: '🏆 深刻體會！中英軍事科技懸殊是戰爭的深層原因，更帶出「落後就要捱打、自強不息」的核心價值觀！'
+        },
+        clueTitle: '第6組證物：中英軍事科技懸殊（堅船利炮 vs 木船舊炮）',
+        clueDesc: '英國擁有工業革命後的蒸汽鐵甲艦與遠程火炮，清軍仍停留在木帆船與冷兵器時代，屬「深層科技與國力原因」。',
+        clueCategory: 'root'
       }
     ];
 
-    let activeIdx = 0, remainingKeys = 3, unlockedClueIds = new Set();
-    let gasWebAppUrl = localStorage.getItem('twccps_gas_url') || DEFAULT_GAS_URL;
+    // 狀態管理
+    let activeIdx = 0;
+    let remainingKeys = 3;
+    let unlockedClueIds = new Set();
+    let chatHistories = {};
+    // 改用全新變數名 twccps_opium_gas_url，徹底清除舊 profile.html 網址快取！
+    let gasWebAppUrl = localStorage.getItem('twccps_opium_gas_url') || DEFAULT_GAS_URL;
 
     function init() {
-      if (gasWebAppUrl) document.getElementById('gas-url-input').value = gasWebAppUrl;
-      renderCharTabs(); selectChar(0); renderCluesStage();
+      CHARACTERS.forEach(c => {
+        const savedPhoto = localStorage.getItem('photo6_' + c.id);
+        if (savedPhoto) c.avatarUrl = savedPhoto;
+        chatHistories[c.id] = [{ role: 'ai', html: c.greeting }];
+      });
+      if (gasWebAppUrl) {
+        document.getElementById('gas-url-input').value = gasWebAppUrl;
+      }
+      updateGasPill();
+      renderCharTabs();
+      selectChar(0);
+      renderCluesStage();
+    }
+
+    function updateGasPill() {
+      const pill = document.getElementById('gas-status-pill');
+      if (gasWebAppUrl && gasWebAppUrl.startsWith('https://script.google.com/')) {
+        pill.textContent = '🟢 已連接 GAS 雲端 AI（學生自由審問模式）';
+        pill.className = 'text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-600 font-bold';
+      } else {
+        pill.textContent = '⚡ 智能角色對話模式（按右上角「教師設定」可貼上 GAS 網址）';
+        pill.className = 'text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold';
+      }
     }
 
     function getFallbackSvg(n) {
@@ -397,88 +519,187 @@
     }
 
     function renderCharTabs() {
-      document.getElementById('char-tabs').innerHTML = CHARACTERS.map((c, idx) => `
-        <button onclick="selectChar(${idx})" class="p-2.5 rounded-xl border text-left transition flex items-center gap-2.5 ${idx === activeIdx ? 'bg-amber-500/20 border-amber-400' : 'bg-slate-950/70 border-slate-800'}">
-          <img src="${c.avatarUrl}" onerror="this.src='${getFallbackSvg(c.name)}'" class="w-10 h-10 rounded-lg object-cover">
-          <div class="min-w-0"><div class="text-[10px] font-black text-amber-300">${c.group}</div><div class="font-bold text-xs text-white truncate">${c.name}</div></div>
-        </button>`).join('');
+      document.getElementById('char-tabs').innerHTML = CHARACTERS.map((c, idx) => {
+        const isCurrent = idx === activeIdx;
+        const isDone = unlockedClueIds.has(c.id);
+        return `
+          <button onclick="selectChar(${idx})" class="p-2.5 rounded-xl border text-left transition flex items-center gap-2.5 ${isCurrent ? 'bg-amber-500/20 border-amber-400 shadow-md' : 'bg-slate-950/70 border-slate-800 hover:border-slate-700'}">
+            <img src="${c.avatarUrl}" onerror="this.src='${getFallbackSvg(c.name)}'" class="w-10 h-10 rounded-lg object-cover border border-amber-500/50 shrink-0">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-black text-amber-300">${c.group}</span>
+                ${isDone ? '<span class="text-[10px] text-emerald-400 font-bold">✓已取證</span>' : ''}
+              </div>
+              <div class="font-bold text-xs text-white truncate">${c.name}</div>
+              <div class="text-[10px] text-slate-400 truncate">${c.title}</div>
+            </div>
+          </button>`;
+      }).join('');
     }
 
     function selectChar(idx) {
-      activeIdx = idx; const c = CHARACTERS[idx]; renderCharTabs();
-      document.getElementById('stage-avatar').src = c.avatarUrl;
+      activeIdx = idx;
+      const c = CHARACTERS[idx];
+      renderCharTabs();
+
+      const avatarEl = document.getElementById('stage-avatar');
+      avatarEl.src = c.avatarUrl;
+      avatarEl.onerror = () => { avatarEl.src = getFallbackSvg(c.name); };
+
       document.getElementById('stage-group-tag').textContent = c.group;
       document.getElementById('stage-stance').textContent = c.stance;
       document.getElementById('stage-name').textContent = `${c.name}（${c.title}）`;
       document.getElementById('stage-bio').textContent = c.bio;
-      document.getElementById('asked-question-banner').classList.add('hidden');
-      document.getElementById('ai-answer-box').innerHTML = `<p class="text-slate-200">${c.greeting}</p>`;
-      document.getElementById('followup-box').classList.add('hidden');
-      updateClueStatusFooter(); renderQuestionCards();
-    }
 
-    function renderQuestionCards() {
-      const c = CHARACTERS[activeIdx];
-      const badgeStyles = ['bg-slate-800 text-slate-300', 'bg-slate-800 text-amber-300', 'bg-amber-500/20 text-amber-300', 'bg-rose-500/20 text-rose-300'];
-      document.getElementById('question-cards').innerHTML = c.cards.map((card, cIdx) => `
-        <div onclick="handleCardClick(${cIdx})" class="card-hover cursor-pointer bg-slate-950/90 border border-slate-800 p-3 rounded-xl flex items-start justify-between gap-3">
-          <div class="space-y-1">
-            <span class="inline-block text-[11px] font-black px-2 py-0.5 rounded border ${badgeStyles[card.level]}">${card.star}</span>
-            <p class="text-xs md:text-sm font-bold text-slate-100">${card.q}</p>
+      // 渲染左下方「提問句式靈感庫（點擊只填入問題開頭，讓學生自己補完下半句）」
+      const scBox = document.getElementById('scaffolds-box');
+      scBox.innerHTML = c.scaffolds.map((s, sIdx) => `
+        <button type="button" onclick="fillScaffold(${sIdx})" class="text-left p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 transition flex items-center justify-between gap-2">
+          <div class="text-xs text-slate-200 truncate">
+            <span class="font-black text-amber-400 mr-1.5">${s.star}：</span>「${s.prefix}……」
           </div>
-          <span class="text-xs bg-amber-500/15 text-amber-300 px-2.5 py-1 rounded-lg font-bold shrink-0 mt-1">發問 🔑</span>
-        </div>`).join('');
+          <span class="text-[10px] bg-slate-800 text-amber-300 px-2 py-0.5 rounded shrink-0">填入句式 ✍️</span>
+        </button>
+      `).join('');
+
+      document.getElementById('followup-box').classList.add('hidden');
+      renderChatStream();
+      updateClueStatusFooter();
     }
 
-    function handleCardClick(cardIdx) {
-      if (remainingKeys <= 0) { alert('本組 3 次黃金提問機會已用完！'); return; }
-      remainingKeys--; updateKeysDisplay();
-      const c = CHARACTERS[activeIdx], card = c.cards[cardIdx];
-      document.getElementById('asked-question-banner').textContent = `🕵️ 小組提問（${card.star}）：「${card.q}」`;
-      document.getElementById('asked-question-banner').classList.remove('hidden');
-      document.getElementById('ai-answer-box').innerHTML = `<p>${card.a}</p>`;
-      if (card.level >= 1) showFollowUpChallenge(c);
-      else document.getElementById('followup-box').classList.add('hidden');
-    }
-
-    async function handleCustomGasAsk(e) {
-      e.preventDefault();
-      const input = document.getElementById('custom-q-input'), q = input.value.trim(); if (!q) return;
-      if (remainingKeys <= 0) { alert('本組提問機會已用完！'); return; }
-      remainingKeys--; updateKeysDisplay();
-
+    // 點擊鷹架時，將開頭句式填入第一個空白的問題框，並聚焦讓學生繼續打字
+    function fillScaffold(sIdx) {
       const c = CHARACTERS[activeIdx];
-      document.getElementById('asked-question-banner').textContent = `🕵️ 小組 AI 自由發問：「${q}」`;
-      document.getElementById('asked-question-banner').classList.remove('hidden');
-      const ansBox = document.getElementById('ai-answer-box');
-      ansBox.innerHTML = `<p class="text-amber-300 animate-pulse font-bold">⏳ 正在連線雲端 AI...</p>`;
-      input.value = '';
+      const prefixText = c.scaffolds[sIdx].prefix;
+      const q1 = document.getElementById('group-q1');
+      const q2 = document.getElementById('group-q2');
+      const q3 = document.getElementById('group-q3');
 
-      let reply = null;
-      if (gasWebAppUrl) {
-        try {
-          const res = await fetch(gasWebAppUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ systemPrompt: c.systemPrompt, question: q, model: 'gemini-2.5-flash' })
-          });
-          const data = await res.json();
-          if (data.status === 'ok') reply = data.reply;
-        } catch (err) { console.warn('GAS 呼叫失敗，切換至內建知識庫'); }
+      let targetInput = q1;
+      if (q1.value.trim() !== '' && q2.value.trim() === '') targetInput = q2;
+      else if (q1.value.trim() !== '' && q2.value.trim() !== '') targetInput = q3;
+
+      targetInput.value = prefixText;
+      targetInput.focus();
+    }
+
+    // 渲染右側對話流
+    function renderChatStream() {
+      const c = CHARACTERS[activeIdx];
+      const stream = document.getElementById('chat-stream');
+      const history = chatHistories[c.id] || [];
+
+      stream.innerHTML = history.map(item => {
+        if (item.role === 'user') {
+          return `
+            <div class="flex justify-end">
+              <div class="bg-amber-500 text-slate-950 font-bold px-3.5 py-2.5 rounded-2xl rounded-tr-none max-w-[85%] text-xs md:text-sm shadow">
+                <div class="text-[10px] opacity-75 mb-0.5">🕵️ ${c.group}調查員提問：</div>
+                <div>${item.html}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="flex items-start gap-2.5">
+              <img src="${c.avatarUrl}" onerror="this.src='${getFallbackSvg(c.name)}'" class="w-9 h-9 rounded-xl object-cover border border-amber-400 shrink-0 mt-0.5">
+              <div class="bg-slate-900 border border-slate-700 text-slate-100 px-3.5 py-2.5 rounded-2xl rounded-tl-none max-w-[88%] text-xs md:text-sm leading-relaxed shadow">
+                <div class="text-[11px] font-black text-amber-400 mb-1">${c.name}（${c.title}）：</div>
+                <div>${item.html}</div>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    // 學生按下第 1、2、3 條問題的「發問」按鈕
+    async function askGroupQuestion(slotNum) {
+      const inputEl = document.getElementById('group-q' + slotNum);
+      const qText = inputEl.value.trim();
+      if (!qText) {
+        alert(`請先在「小組黃金問題 (${slotNum})」欄位輸入你們討論好的問題！`);
+        inputEl.focus();
+        return;
       }
 
-      if (!reply) reply = c.cards[1].a;
-      ansBox.innerHTML = `<p>${reply}</p>`;
+      if (remainingKeys <= 0) {
+        alert('本組 3 次黃金提問機會已用完！如需繼續追問，可按頂部「重設」。');
+        return;
+      }
+      remainingKeys--;
+      updateKeysDisplay();
+
+      const c = CHARACTERS[activeIdx];
+      chatHistories[c.id].push({ role: 'user', html: qText });
+      chatHistories[c.id].push({ role: 'ai', html: `<span class="text-amber-300 animate-pulse font-bold">⏳ ${c.name}正在思考並回應你們的問題...</span>` });
+      renderChatStream();
+
+      let replyText = null;
+
+      // 1. 優先呼叫 Google Apps Script (GAS) 雲端 AI
+      if (gasWebAppUrl && gasWebAppUrl.startsWith('https://script.google.com/')) {
+        try {
+          // 不加自訂 headers，使用瀏覽器最純粹的 Simple POST Request，100% 避開 CORS 預檢阻擋
+          const res = await fetch(gasWebAppUrl, {
+            method: 'POST',
+            body: JSON.stringify({
+              systemPrompt: c.systemPrompt,
+              question: qText
+            })
+          });
+          const data = await res.json();
+          if (data && data.success && data.text) {
+            replyText = data.text.replace(/\n/g, '<br>');
+          } else if (data && data.status === 'ok' && data.reply) {
+            replyText = data.reply.replace(/\n/g, '<br>');
+          } else if (data && data.error) {
+            console.warn('GAS 回報錯誤:', data.error);
+          }
+        } catch (err) {
+          console.warn('GAS 連線異常，自動切換至智能角色知識庫:', err);
+        }
+      }
+
+      // 2. 若未設定 GAS 或 API 異常，使用智能語意分析引擎回應（確保課堂 100% 流暢）
+      if (!replyText) {
+        replyText = getSmartRoleReply(c, qText);
+      }
+
+      // 更新最後一則 AI 訊息
+      chatHistories[c.id][chatHistories[c.id].length - 1].html = replyText;
+      renderChatStream();
+
+      // 顯示下方「審問結論核實（解鎖證物卡）」
       showFollowUpChallenge(c);
     }
 
+    // 智能語意後備引擎（連打「你好」都會自然打招呼並引導回正題！）
+    function getSmartRoleReply(c, q) {
+      const cleanQ = q.toLowerCase();
+      if (cleanQ.includes('你好') || cleanQ.includes('hi') || cleanQ.includes('hello') || cleanQ.length <= 4) {
+        return c.fallbackAnswers.greeting;
+      }
+      if (cleanQ.includes('船') || cleanQ.includes('炮') || cleanQ.includes('武器') || cleanQ.includes('科技') || cleanQ.includes('打輸') || cleanQ.includes('防備') || cleanQ.includes('軍')) {
+        return c.fallbackAnswers.weapon;
+      }
+      if (cleanQ.includes('真正') || cleanQ.includes('藉口') || cleanQ.includes('市場') || cleanQ.includes('導火線') || cleanQ.includes('自由') || cleanQ.includes('教訓') || cleanQ.includes('本質') || cleanQ.includes('革職') || cleanQ.includes('求和')) {
+        return c.fallbackAnswers.deep;
+      }
+      return c.fallbackAnswers.default;
+    }
+
     function showFollowUpChallenge(c) {
-      const box = document.getElementById('followup-box'), opts = document.getElementById('followup-options'), fb = document.getElementById('followup-feedback');
-      fb.classList.add('hidden'); box.classList.remove('hidden');
+      const box = document.getElementById('followup-box');
+      const opts = document.getElementById('followup-options');
+      const fb = document.getElementById('followup-feedback');
+      fb.classList.add('hidden');
+      box.classList.remove('hidden');
       opts.innerHTML = `
         <p class="text-xs text-slate-300 mb-1.5">${c.followUp.prompt}</p>
-        <button onclick="checkFollowUp('A')" class="w-full text-left p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-100">${c.followUp.optA}</button>
-        <button onclick="checkFollowUp('B')" class="w-full text-left p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-100">${c.followUp.optB}</button>
+        <button onclick="checkFollowUp('A')" class="w-full text-left p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-100">${c.followUp.optA}</button>
+        <button onclick="checkFollowUp('B')" class="w-full text-left p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-100">${c.followUp.optB}</button>
       `;
     }
 
@@ -491,7 +712,7 @@
         unlockClueForChar(c.id);
       } else {
         fb.classList.add('bg-rose-950', 'text-rose-300');
-        fb.textContent = '🤔 這條追問未能挖出深層原因，請再試一次！';
+        fb.textContent = '🤔 再根據古人剛才的回答想一想，揀選最準確的歷史結論！';
       }
     }
 
@@ -507,7 +728,7 @@
     function updateClueStatusFooter() {
       const c = CHARACTERS[activeIdx], el = document.getElementById('clue-status-text');
       if (unlockedClueIds.has(c.id)) { el.textContent = `✅ 已解鎖【${c.clueTitle}】`; el.className = 'font-bold text-emerald-400'; }
-      else { el.textContent = '🔒 尚未解鎖'; el.className = 'font-bold text-slate-400'; }
+      else { el.textContent = '🔒 尚未解鎖（發問後核實結論即可解鎖）'; el.className = 'font-bold text-slate-400'; }
     }
 
     function updateKeysDisplay() { document.getElementById('keys-display').textContent = '🔑'.repeat(remainingKeys) + '🖤'.repeat(3 - remainingKeys); }
@@ -517,7 +738,9 @@
       const file = event.target.files[0]; if (!file) return;
       const reader = new FileReader();
       reader.onload = function(e) {
-        CHARACTERS[activeIdx].avatarUrl = e.target.result;
+        const c = CHARACTERS[activeIdx];
+        c.avatarUrl = e.target.result;
+        localStorage.setItem('photo6_' + c.id, e.target.result);
         selectChar(activeIdx); renderCluesStage();
       };
       reader.readAsDataURL(file);
@@ -525,7 +748,7 @@
 
     function renderCluesStage() {
       document.getElementById('clues-container').innerHTML = CHARACTERS.map(c => {
-        if (!unlockedClueIds.has(c.id)) return `<div class="bg-slate-900/50 border border-dashed border-slate-700 p-5 rounded-2xl flex items-center justify-center text-slate-500 text-xs h-44">🔒 ${c.group} 尚未解鎖</div>`;
+        if (!unlockedClueIds.has(c.id)) return `<div class="bg-slate-900/50 border border-dashed border-slate-700 p-5 rounded-2xl flex items-center justify-center text-slate-500 text-xs h-44">🔒 ${c.group}（${c.name}）證物尚未解鎖</div>`;
         return `
           <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl flex flex-col justify-between space-y-3">
             <div class="flex items-start gap-3">
@@ -552,10 +775,10 @@
       el.classList.remove('hidden', 'bg-emerald-950', 'text-emerald-300', 'bg-rose-950', 'text-rose-300');
       if (picked === actual) {
         el.classList.add('bg-emerald-950', 'text-emerald-300');
-        el.textContent = actual === 'trigger' ? '✅ 分類正確！這是直接導火線。' : '✅ 分類正確！這是深層根本原因。';
+        el.textContent = actual === 'trigger' ? '✅ 分類正確！這是引爆戰爭的直接導火線（火柴）。' : '✅ 分類正確！這是令戰爭必然爆發的深層根本原因（火藥桶）。';
       } else {
         el.classList.add('bg-rose-950', 'text-rose-300');
-        el.textContent = '🤔 再想一想：這是表面藉口還是長遠根本因素？';
+        el.textContent = '🤔 再想一想：這是表面藉口，還是背後長期累積的經濟／國力因素？';
       }
     }
 
@@ -564,7 +787,7 @@
       fb.classList.remove('hidden', 'bg-emerald-950', 'text-emerald-300', 'bg-rose-950', 'text-rose-300');
       if (isCorrect) {
         fb.classList.add('bg-emerald-950', 'text-emerald-300');
-        fb.textContent = '🎯 分析深刻！成功分辨「表面導火線」與「深層根本原因」。';
+        fb.textContent = '🎯 分析深刻！成功分辨「表面導火線（虎門銷煙）」與「深層根本原因（英國扭轉貿易逆差與打開市場、清朝閉關落後）」。';
       } else {
         fb.classList.add('bg-rose-950', 'text-rose-300');
         fb.textContent = '💡 提示：就算林則徐不銷煙，英國為了市場與白銀遲早也會開戰！';
@@ -581,9 +804,18 @@
     function toggleTeacherModal() { document.getElementById('teacher-modal').classList.toggle('hidden'); }
     function saveTeacherConfig() {
       gasWebAppUrl = document.getElementById('gas-url-input').value.trim();
-      localStorage.setItem('twccps_gas_url', gasWebAppUrl);
-      toggleTeacherModal(); alert('GAS 網址已儲存！');
+      localStorage.setItem('twccps_opium_gas_url', gasWebAppUrl);
+      updateGasPill();
+      toggleTeacherModal();
+      alert('✅ GAS 網址已更新並儲存！');
     }
+    function clearSavedGasUrl() {
+      localStorage.removeItem('twccps_opium_gas_url');
+      gasWebAppUrl = DEFAULT_GAS_URL;
+      document.getElementById('gas-url-input').value = gasWebAppUrl;
+      updateGasPill();
+    }
+
     window.onload = init;
   </script>
 </body>
